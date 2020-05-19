@@ -4,8 +4,9 @@
            if(data ==null){
                $("#loginStatus").hide();
            }else{
-               var msg = "欢迎回来，"+data.name;
+               var msg = "欢迎回来,"+data.name;
                $("#span_username").html(msg);
+               $("#loginStatus").show();
            }
         });
 
