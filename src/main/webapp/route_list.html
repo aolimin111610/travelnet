@@ -9,6 +9,15 @@
     <link rel="stylesheet" type="text/css" href="css/common.css">
     <link rel="stylesheet" href="css/search.css">
     <script src="js/jquery-3.3.1.js"></script>
+    <script type="text/javascript">
+        $(function(){
+            //search 属性是一个可读可写的字符串，可设置或返回当前 URL 的查询部分（问号 ? 之后的部分）
+            var search = location.search;
+            //alert(search)
+            var cid = search.split("=")[1];
+
+        });
+    </script>
 </head>
 <body>
 <!--引入头部-->
