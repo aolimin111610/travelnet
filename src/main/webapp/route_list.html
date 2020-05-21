@@ -16,13 +16,24 @@
             //alert(search)
             var cid = search.split("=")[1];
             load(cid);
-
+           // test1();
+            //test2();
+           // $("#nextPage").hide();
+           //隐藏div
+           // $("#demo").attr("style","display:block;");//显示div
         });
+
+        function test1() {
+            setTimeout(function(){ alert("Hello"); }, 3000);
+        }
+
+        function test2() {
+            setTimeout(function(){ alert("Hello2"); }, 2000);
+        }
 
         function load(cid,currentPage){
             $.get("route/pageQuery",{cid:cid,currentPage:currentPage},function(pb){
                 //解析pageBean数据，展示到页面
-
 
                 //分页工具条数据显示
                 //展示总页码和总记录数
@@ -39,7 +50,7 @@
                     beforeNum = 1;
                 }
 
-                var beforePage = '<li class="threeword"  id="beforePage" onclick="javascript:load('+cid+','+beforeNum+')"><a href="javascript:void(0)">上一页</a></li>';
+                var beforePage = '<li class="threeword"  id="nextPage" onclick="javascript:load('+cid+','+beforeNum+')"><a href="javascript:void(0)">上一页</a></li>';
                 lis += firstPage;
                 lis += beforePage;
                 //展示分页页码
@@ -103,7 +114,7 @@
                 if(lastNum > pb.totalPage){
                     lastNum = pb.totalPage;
                 }
-                var nextPage = '<li class="threeword"  onclick="javascript:load('+cid+','+lastNum+')"><a href="javascript:void(0)">下一页</a></li>';
+                var nextPage = '<li class="threeword"  id="lastPage"  onclick="javascript:load('+cid+','+lastNum+')"><a href="javascript:void(0)">下一页</a></li>';
 
                 lis += lastPage;
                 lis += nextPage;
@@ -157,6 +168,11 @@
 
                 //定位到页面顶部
                 window.scrollTo(0,0);
+                if(pb.currentPage==1)
+                    $("#nextPage").attr("style","display:none;");
+                if(pb.currentPage == pb.totalPage){
+                    $("#lastPage").attr("style","display:none;");
+                }
             });
         }
     </script>
