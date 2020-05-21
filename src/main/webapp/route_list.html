@@ -15,8 +15,150 @@
             var search = location.search;
             //alert(search)
             var cid = search.split("=")[1];
+            load(cid);
 
         });
+
+        function load(cid,currentPage){
+            $.get("route/pageQuery",{cid:cid,currentPage:currentPage},function(pb){
+                //解析pageBean数据，展示到页面
+
+
+                //分页工具条数据显示
+                //展示总页码和总记录数
+                $("#totalPage").html(pb.totalPage);
+                $("#totalCount").html(pb.totalCount);
+
+                var lis = "";
+                //首页
+                var firstPage = '<li onclick="javascript:load('+ cid +')"><a href="javascript:void(0)">首页</a></li>';
+
+                //计算上一页的页码
+                var beforeNum =  pb.currentPage - 1;
+                if(beforeNum <= 0){
+                    beforeNum = 1;
+                }
+
+                var beforePage = '<li class="threeword"  id="beforePage" onclick="javascript:load('+cid+','+beforeNum+')"><a href="javascript:void(0)">上一页</a></li>';
+                lis += firstPage;
+                lis += beforePage;
+                //展示分页页码
+                /*
+                   1.一共展示10个页码，能够达到前5后4的效果
+                   2.如果前边不够5个，后边补齐10个
+                   3.如果后边不足4个，前边补齐10个
+               */
+
+                //定义开始位置begin和结束位置end
+                var begin ;
+                var end;
+                //显示十个页码效果
+                if(pb.totalPage<10){
+                    //总页码不足十个
+                    begin = 1;
+                    end = pb.totalPage;
+                }else{
+                    //总页码超过十个
+                    begin = pb.currentPage - 5;
+                    end = pb.currentPage + 4;
+
+                    //2.如果前边不够5个，后边补齐10个
+                    if(begin < 1){
+                        begin = 1;
+                        end = begin + 9;
+                    }
+
+                    //3.如果后边不足4个，前边补齐10个
+                    if(end > pb.totalPage){
+                        end = pb.totalPage;
+                        begin = end - 9 ;
+                    }
+                }
+
+                for (var i = begin; i <= end; i++) {
+                    //创建页码的li
+                    if(pb.currentPage == i){
+                        var li ='<li class="curPage" onclick="javascript:load('+ cid +','+ i +')"><a href="javascript:void(0)">'+i+'</a></li>'
+                    }else {
+                        var li = '<li onclick="javascript:load(' + cid + ',' + i + ')"><a href="javascript:void(0)">' + i + '</a></li>'
+                    }
+                    //拼接字符串
+                    lis += li;
+                }
+
+               /* for (var i = 1; i <= pb.totalPage; i++) {
+                    //创建页码的li
+                    if(pb.currentPage == i){
+                        var li ='<li class="curPage" onclick="javascript:load('+ cid +','+ i +')"><a href="javascript:void(0)">'+i+'</a></li>'
+                    }else {
+                        var li = '<li onclick="javascript:load(' + cid + ',' + i + ')"><a href="javascript:void(0)">' + i + '</a></li>'
+                    }
+                    //拼接字符串
+                    lis += li;
+                }*/
+                var lastPage = '<li class="threeword" onclick="javascript:load('+cid+ ','+ pb.totalPage +')"><a href="javascript:void(0);">末页</a></li>';
+
+                //计算上一页的页码
+                var lastNum =  pb.currentPage + 1;
+                if(lastNum > pb.totalPage){
+                    lastNum = pb.totalPage;
+                }
+                var nextPage = '<li class="threeword"  onclick="javascript:load('+cid+','+lastNum+')"><a href="javascript:void(0)">下一页</a></li>';
+
+                lis += lastPage;
+                lis += nextPage;
+                //将li的内容设置到ul中
+                $("#pageNum").html(lis);
+
+
+                //列表数据战术
+                /*
+                 <li>
+                            <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
+                            <div class="text1">
+                                <p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>
+                                <br/>
+                                <p>1-2月出发，网付立享￥1099/2人起！爆款位置有限，抢完即止！</p>
+                            </div>
+                            <div class="price">
+                                <p class="price_num">
+                                    <span>&yen;</span>
+                                    <span>1199</span>
+                                    <span>起</span>
+                                </p>
+                                <p><a href="route_detail.html">查看详情</a></p>
+                            </div>
+                    </li>
+                * */
+
+                var route_lis = "";
+                for (var i = 0; i <pb.list.length ; i++) {
+                    var route = pb.list[i];
+                    var li = '<li>\n' +
+                        '<div class="img"><img src="'+ pb.list[i].rimage +'" style="width:299px;" alt=""></div>\n' +
+                        '<div class="text1">\n' +
+                        '<p>'+ pb.list[i].rname +'</p>\n' +
+                        '<br/>\n' +
+                        '<p>'+ pb.list[i].routeIntroduce +'</p>\n' +
+                        '</div>\n' +
+                        '<div class="price">\n' +
+                        '<p class="price_num">\n' +
+                        '<span>&yen;</span>\n' +
+                        '<span>' + pb.list[i].price +'</span>\n' +
+                        '<span>起</span>\n' +
+                        '</p>\n' +
+                        '<p><a href="route_detail.html">查看详情</a></p>\n' +
+                        '</div>\n' +
+                        '</li>';
+                    route_lis += li;
+                }
+
+                $("#route").html(route_lis);
+
+                //定位到页面顶部
+                window.scrollTo(0,0);
+            });
+        }
     </script>
 </head>
 <body>
@@ -34,8 +176,8 @@
                         <span>商品信息</span>
                         <span class="jg">价格</span>
                     </div>
-                    <ul>
-                        <li>
+                    <ul id="route">
+                        <!--<li>
                             <div class="img"><img src="images/04-search_03.jpg" alt=""></div>
                             <div class="text1">
                                 <p>【减100元 含除夕/春节出发】广州增城三英温泉度假酒店/自由行套票</p>
@@ -162,15 +304,15 @@
                                 </p>
                                 <p><a href="route_detail.html">查看详情</a></p>
                             </div>
-                        </li>
+                        </li>-->
                     </ul>
                     <div class="page_num_inf">
                         <i></i> 共
-                        <span>12</span>页<span>132</span>条
+                        <span id="totalPage"></span>页<span id="totalCount"></span>条
                     </div>
                     <div class="pageNum">
-                        <ul>
-                            <li><a href="">首页</a></li>
+                        <ul id="pageNum">
+                           <!-- <li><a href="">首页</a></li>
                             <li class="threeword"><a href="#">上一页</a></li>
                             <li><a href="#">1</a></li>
                             <li><a href="#">2</a></li>
@@ -183,7 +325,7 @@
                             <li><a href="#">9</a></li>
                             <li><a href="#">10</a></li>
                             <li class="threeword"><a href="javascript:;">下一页</a></li>
-                            <li class="threeword"><a href="javascript:;">末页</a></li>
+                            <li class="threeword"><a href="javascript:;">末页</a></li>-->
                         </ul>
                     </div>
                 </div>
