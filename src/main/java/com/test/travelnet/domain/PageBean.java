@@ -10,7 +10,7 @@ import java.util.List;
  * totalCount  总记录数
  * totalPage   总页数
  * currentPage 当前页码
- * pageSize    每页显示的数据
+ * pageSize    每页显示的条数
  * list        每页显示的数据集合
  */
 public class PageBean<T> {
