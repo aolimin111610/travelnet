@@ -63,5 +63,20 @@ public class RouteServlet extends BaseServlet {
 
     }
 
+    /***
+     * 根据id查询一个旅游线路详细信息
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void findOne(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //获取id
+        String rid = request.getParameter("rid");
+        //调用service查询route对象
+        Route route = routeService.findOne(rid);
+        //将查询的对象返回给客户端
+        writeValue(route,response);
+    }
 
 }
