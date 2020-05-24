@@ -1,3 +1,5 @@
+
+<script src="js/getParameter.js"></script>
 <script type="text/javascript">
     $(function(){
         $.get("user/findOne",{},function(data){
@@ -20,6 +22,13 @@
             list += '<li><a href="favoriterank.html">收藏排行榜</a></li>';
             $("#nav").html(list);
         });
+        $("#search-button").click(function(){
+            var rname = $("#search_input").val();
+            var cid = getParameter("cid");
+            // 跳转路径 http://localhost/travel/route_list.html?cid=5，拼接上rname=xxx
+            location.href="http://localhost:8080/route_list.html?cid="+cid+"&rname="+ rname;
+        });
+
     });
 
 </script>
@@ -48,8 +57,8 @@
                     <a href="/"><img src="images/logo.jpg" alt=""></a>
                 </div>
                 <div class="search">
-                    <input name="" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
-                    <a href="javascript:;" class="search-button">搜索</a>
+                    <input name="" id="search_input" type="text" placeholder="请输入路线名称" class="search_input" autocomplete="off">
+                    <a href="javascript:;" id="search-button" class="search-button">搜索</a>
                 </div>
                 <div class="hottel">
                     <div class="hot_pic">

@@ -24,23 +24,29 @@ public class RouteServlet extends BaseServlet {
      */
     public void pageQuery(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         //接受参数
-        String currentPageStr = request.getParameter("currentPage");//获取当前页
-        String pageSizeStr = request.getParameter("pageSize");//获取每页显示的条数
-        String cidStr = request.getParameter("cid");//分类数
+        //获取当前页
+        String currentPageStr = request.getParameter("currentPage");
+        //获取每页显示的条数
+        String pageSizeStr = request.getParameter("pageSize");
+        //分类数
+        String cidStr = request.getParameter("cid");
+
+        String rname = request.getParameter("rname");
 
         int cid = 0;
         //处理参数
-        if(cidStr != null && cidStr.length() > 0){
+        if(cidStr != null && cidStr.length() > 0 && !"null".equals(cidStr)){
              cid = Integer.parseInt(cidStr);
         }
-        int currentPage = 0;//当前页码，如果没有传递，则默认显示第一页
+        //当前页码，如果没有传递，则默认显示第一页
+        int currentPage = 0;
         if(currentPageStr != null && currentPageStr.length() > 0){
             currentPage = Integer.parseInt(currentPageStr);
         }else{
             currentPage = 1;
         }
-
-        int pageSize = 0;//每页显示条数，如果不传递，默认显示五条
+        //每页显示条数，如果不传递，默认显示五条
+        int pageSize = 0;
         if(pageSizeStr != null && pageSizeStr.length() > 0){
             pageSize = Integer.parseInt(pageSizeStr);
         }else{
@@ -49,7 +55,7 @@ public class RouteServlet extends BaseServlet {
 
 
         //调用 service 查询 pageBean 对象
-        PageBean<Route> pageBean = routeService.pageQuery(cid, currentPage, pageSize);
+        PageBean<Route> pageBean = routeService.pageQuery(cid, currentPage, pageSize,rname);
 
 
         //将pageBean对象转换微微json格式数据返回给客户端
