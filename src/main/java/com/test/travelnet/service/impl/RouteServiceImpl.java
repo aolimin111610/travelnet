@@ -1,8 +1,10 @@
 package com.test.travelnet.service.impl;
 
+import com.test.travelnet.dao.FavoriteDao;
 import com.test.travelnet.dao.RouteDao;
 import com.test.travelnet.dao.RouteImgDao;
 import com.test.travelnet.dao.SellerDao;
+import com.test.travelnet.dao.impl.FavoriteDaoImpl;
 import com.test.travelnet.dao.impl.RouteDaoImpl;
 import com.test.travelnet.dao.impl.RouteImgDaoImpl;
 import com.test.travelnet.dao.impl.SerllerDaoImpl;
@@ -26,6 +28,8 @@ public class RouteServiceImpl implements RouteService {
     private RouteImgDao routeImgDao = new RouteImgDaoImpl();
 
     private SellerDao sellerDao = new SerllerDaoImpl();
+
+    private FavoriteDao favoriteDao = new FavoriteDaoImpl();
 
     @Override
     public PageBean<Route> pageQuery(int cid, int currentPage, int pageSize,String rname) {
@@ -67,6 +71,9 @@ public class RouteServiceImpl implements RouteService {
         Seller seller = sellerDao.findBySid(route.getSid());
         route.setSeller(seller);
 
+        //查询用户收藏的次数
+        int count = favoriteDao.findCountByRid(route.getRid());
+        route.setCount(count);
         return route;
     }
 }

@@ -2,19 +2,24 @@ package com.test.travelnet.web.servlet;
 
 import com.test.travelnet.domain.PageBean;
 import com.test.travelnet.domain.Route;
+import com.test.travelnet.domain.User;
+import com.test.travelnet.service.FavoriteService;
 import com.test.travelnet.service.RouteService;
+import com.test.travelnet.service.impl.FavoriteServiceImpl;
 import com.test.travelnet.service.impl.RouteServiceImpl;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet("/route/*")
 public class RouteServlet extends BaseServlet {
+
     private RouteService routeService = new RouteServiceImpl();
+
+    private FavoriteService favoriteService = new FavoriteServiceImpl();
     /***
      * 分页查询
      * @param request
@@ -79,4 +84,30 @@ public class RouteServlet extends BaseServlet {
         writeValue(route,response);
     }
 
+    /***
+     * 判断当前登录用户是否收藏过改旅游线路
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void isFavorite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //获取线路id
+        String rid = request.getParameter("rid");
+
+        //获取当前登录的用户 user
+        User user = (User) request.getSession().getAttribute("user");
+        int uid;
+        if(user!=null){
+            //当前用户登录
+            uid = user.getUid();
+        }else{
+            uid = 0;
+        }
+
+        //调用favoriteService查询是否收藏
+        boolean flag = favoriteService.isFavorite(rid, uid);
+
+        writeValue(flag,response);
+    }
 }
