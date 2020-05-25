@@ -173,25 +173,25 @@
         }
     }
 
-    $(function(){
+    $(function() {
         var rid = getParameter("rid");
-        $.get("route/findOne",{rid:rid},function(route){
+        $.get("route/findOne", {rid: rid}, function (route) {
             console.log(route);
             $("#rname").html(route.rname);
             $("#routeIntroduce").html(route.routeIntroduce);
             $("#sname").html(route.seller.sname);
             $("#consphone").html(route.seller.consphone);
             $("#address").html(route.seller.address);
-            $("#price").html("¥"+route.price);
-            $("#collect").html("已收藏"+route.count+"次");
+            $("#price").html("¥" + route.price);
+            $("#collect").html("已收藏" + route.count + "次");
 
-            var ddstr='<a class="up_img up_img_disable"></a>';
-            for (var i = 0; i <route.routeImgList.length; i++) {
-                if(i >= 4) {
+            var ddstr = '<a class="up_img up_img_disable"></a>';
+            for (var i = 0; i < route.routeImgList.length; i++) {
+                if (i >= 4) {
                     var astr = '  <a title="" class="little_img" data-bigpic="' + route.routeImgList[i].bigPic + '" style="display:none;">\n' +
                         '                        <img src="' + route.routeImgList[i].smallPic + '">\n' +
                         '                    </a>';
-                }else{
+                } else {
                     var astr = '  <a title="" class="little_img" data-bigpic="' + route.routeImgList[i].bigPic + '">\n' +
                         '                        <img src="' + route.routeImgList[i].smallPic + '">\n' +
                         '                    </a>';
@@ -199,12 +199,19 @@
                 ddstr += astr;
             }
 
-            ddstr +='<a class="down_img down_img_disable" style="margin-bottom: 0;"></a>';
+            ddstr += '<a class="down_img down_img_disable" style="margin-bottom: 0;"></a>';
 
             $("#dd").html(ddstr);
             toOpenImg();
         });
 
+
+
+
+
+    });
+    $(function(){
+        var rid = getParameter("rid");
         $.get("route/isFavorite",{rid:rid},function(flag){
             console.log(flag);
             if(flag){
@@ -216,18 +223,29 @@
 
             }
         });
-
-
     });
-        function addFavorite(){
-            alert("12321");
-            $.get("user/findOne",{},function(user){
-                if(user==null){
-                    alert("您尚未登录，请登录！");
-                    location.href="http://localhost:8080/login.html";
-                }
-            });
-        }
+    //点击收藏按钮触发的方法
+    function addFavorite(){
+        var rid = getParameter("rid");
+        //1. 判断用户是否登录
+        $.get("user/findOne",{},function (user) {
+            if(user){
+                //用户登录了
+                //添加功能
+                $.get("route/addFavorite",{rid:rid},function () {
+
+                    //代码刷新页面
+                    location.reload();
+                });
+
+            }else{
+                //用户没有登录
+                alert("您尚未登录，请登录");
+                location.href="http://localhost:8080/login.html";
+            }
+        })
+    }
+
     </script>
 </body>
 
