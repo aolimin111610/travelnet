@@ -23,4 +23,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
         return favorite !=null;
     }
+
+    @Override
+    public void add(String rid, int uid) {
+        favoriteDao.add(Integer.parseInt(rid),uid);
+    }
 }

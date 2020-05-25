@@ -110,4 +110,27 @@ public class RouteServlet extends BaseServlet {
 
         writeValue(flag,response);
     }
+
+    /**
+     * 添加收藏
+     * @param request
+     * @param response
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void addFavorite(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String rid = request.getParameter("rid");
+
+        //获取当前登录的用户 user
+        User user = (User) request.getSession().getAttribute("user");
+        int uid;
+        if(user!=null){
+            //当前用户登录
+            uid = user.getUid();
+        }else{
+           return ;
+        }
+        favoriteService.add(rid,uid);
+    }
+
 }

@@ -26,6 +26,10 @@ public interface FavoriteDao {
      */
     public int findCountByRid(int rid);
 
-
-
+    /***
+     * 收藏次数添加
+     * @param rid
+     * @param uid
+     */
+    public void add(int rid, int uid);
 }
