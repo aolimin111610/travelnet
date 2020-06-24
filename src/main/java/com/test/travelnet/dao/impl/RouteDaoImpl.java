@@ -31,7 +31,7 @@ public class RouteDaoImpl implements RouteDao {
             params.add(cid);
         }
 
-        if(rname != null && rname.length() > 0){
+        if(rname != null && !"null".equals(rname) && rname.length()>0){
             sb.append(" and rname like ? ");
             params.add("%"+rname+"%");
         }
@@ -51,7 +51,7 @@ public class RouteDaoImpl implements RouteDao {
             sb.append(" and cid = ? ");
             params.add(cid);
         }
-        if(rname != null && rname.length()>0){
+        if(rname != null && rname.length()>0 && !"null".equals(rname)){
             sb.append(" and rname like ? ");
             params.add("%"+rname+"%");
         }
